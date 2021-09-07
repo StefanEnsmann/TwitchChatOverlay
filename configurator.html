@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Zensmann's Joined Twitch Chats</title>
+        <meta property="og:title" content="Zensmann's Joined Twitch Chats Configurator" />
+        <meta property="og:description" content="Combine multiple chats into a single overlay!" />
+        <meta property="og:site_name" content="Zensmann's Online Tools" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://tools.ensmann.de/joined-chat/configurator.html" />
+        <meta property="og:image" content="https://tools.ensmann.de/img/joined-chat.png" />
+        <meta property="og:image:type" content="image/png" />
+        <link rel="shortcut icon" type="image/x-icon" href="../img/favicon.ico" />
+        <link rel="stylesheet" href="configurator.css" />
+        <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Alfa+Slab+One|Amatic+SC|Arvo|Bebas+Neue|Bitter|Bowlby+One+SC|Bree+Serif|Caveat|Comfortaa|Concert+One|Cousine|Crimson+Text|Dancing+Script|Domine|EB+Garamond|Fredoka+One|IBM+Plex+Mono|Inconsolata|Indie+Flower|Lalezar|Lato|Libre+Baskerville|Lobster|Lobster+Two|Lora|Merriweather|Montserrat|Muli|Nanum+Gothic+Coding|Noto+Sans|Noto+Sans+JP|Noto+Serif|Nunito|Open+Sans|Open+Sans+Condensed:300|Oswald|PT+Mono|PT+Sans|PT+Serif|Pacifico|Passion+One|Patua+One|Permanent+Marker|Playfair+Display|Poiret+One|Poppins|Raleway|Righteous|Roboto|Roboto+Condensed|Roboto+Mono|Roboto+Slab|Satisfy|Shadows+Into+Light|Slabo+27px|Source+Code+Pro|Source+Sans+Pro|Source+Serif+Pro|Special+Elite|Squada+One|Ubuntu|Ubuntu+Mono|Zilla+Slab&display=swap" rel="stylesheet">
+        <script src="fonts.js"></script>
+    </head>
+    <body onresize="resizeCallback()">
+        <div class="box">
+            <div class="row header" style="margin:5px">
+                <h1>Select your options and configure your own chat embedding for streams!</h1>
+                URL for use in OBS, XSplit, opening in a browser, etc.:<input id="copybutton" value="Copy to clipboard" type="button" onclick="CopyButton()" style="margin-left:30px"/><br/>
+                <a id="urllink" target="_blank" href="https://tools.ensmann.de/joined-chat"><strong id="url" style="font-family: 'Roboto Mono', monospace">https://tools.ensmann.de/joined-chat</strong></a>
+            </div>
+            <div id="content" class="row content">
+                <div class="innerbox">
+                    <div class="col header" style="width:fit-content;overflow-y:auto;margin-right:15px">
+                        <table style="white-space:nowrap;margin:5px">
+                            <tr><td colspan="3"><h2>General</h2></td></tr>
+                            <tr><td>Get messages in channels:</td><td colspan="2"><input style="width:100%" id="channelsInput" type="text" placeholder="Channel1,Channel2,..." oninput="UpdateView()"/></td></tr>
+                            <tr><td>Maximum amount of messages shown</td><td>(Default: 50)</td><td><input class="number" id="maxmessagesInput" type="number" value="50" min="1" oninput="UpdateView()"/></td></tr>
+                            <tr><td>Background color for preview</td><td>(Default: #008000)</td><td><input id="previewColorInput" type="color" value="#008000" oninput="UpdateView()"/></td></tr>
+                            <tr><td>Use background color in real screen</td><td>(Default: false)</td><td><input id="usebackgroundcolorInput" type="checkbox" oninput="UpdateView()"/></td></tr>
+                            <tr><td>Current preview area size</td><td>(width x height)</td><td id="previewSize"></td></tr>
+
+                            <tr><td colspane="3"><h2>Hide the following</h2></td></tr>
+                            <tr><td>Hide messages from:</td><td colspan="2"><input style="width:100%" id="ignoreInput" type="text" placeholder="User1,User2,..." oninput="UpdateView()"/></td></tr>
+                            <tr><td>Hide messages starting with "!"</td><td>(Default: false)</td><td><input id="hideCommandsInput" type="checkbox" oninput="UpdateView()"/></td></tr>
+                            <tr><td>Replace URLs with "***"</td><td>(Default: false)</td><td><input id="hideUrlsInput" type="checkbox" oninput="UpdateView()"/></td></tr>
+
+                            <tr><td colspan="3"><h2>Message style</h2></td></tr>
+                            <tr><td colspan="3">You can have a look at all available fonts at <a href="https://fonts.google.com/" target="_blank">Google Fonts</a> and then select it here afterwards.</td></tr>
+                            <tr><td>Font</td><td>(Default: Montserrat)</td><td><select id="fontSelector" name="generalFont" onchange="UpdateView()"></select></td></tr>
+                            <tr><td>Font size</td><td>(Default: 20px)</td><td><input class="number" id="fontsizeInput" type="number" value="20" min="5" oninput="UpdateView()"/>px</td></tr>
+                            <tr><td>Font color</td><td>(Default: #000000)</td><td><input id="textColorInput" type="color" value="#000000" oninput="UpdateView()"/></td></tr>
+                            <tr><td>Text alignment</td><td>(Default: Left)</td><td><select id="textalign" name="textalign" onchange="UpdateView()"><option value="left">Left</option><option value="right">Right</option><option value="justify">Justify</option></select></td></tr>
+                            <tr><td>Show actions (/me) in user color</td><td>(Default: true)</td><td><input id="coloredActions" type="checkbox" checked oninput="UpdateView()"/></td></tr>
+                            <tr><td>Scale factor for emotes</td><td>(Default: 1)</td><td><input class="number" id="emotescaleInput" type="number" value="1" min="1" step="0.01" oninput="UpdateView()"/></td></tr>
+                            <tr><td>Space between messages</td><td>(Default: 5px)</td><td><input class="number" id="spaceInput" type="number" min="0" value="5" oninput="UpdateView()"/>px</td></tr>
+                            <tr><td>Space around message</td><td>(Default: 5px)</td><td><input class="number" id="spaceAroundInput" type="number" min="0" value="5" oninput="UpdateView()"/>px</td></tr>
+                            <tr><td>Wrap text around name</td><td>(Default: true)</td><td><input id="wrapText" type="checkbox" checked oninput="UpdateView()"/></td></tr>
+                            <tr><td>Horizontal space between sender and message</td><td>(Default: 5px)</td><td><input class="number" id="horizSpaceInput" type="number" min="0" value="5" oninput="UpdateView()"/>px</td></tr>
+                            <tr><td>Vertical space between sender and message</td><td>(Default: 5px)</td><td><input class="number" id="verticSpaceInput" type="number" min="0" value="5" oninput="UpdateView()"/>px</td></tr>
+                            <tr><td>Space reserved for chatter names</td><td>(Default: 200px)</td><td><input class="number" id="namespaceInput" type="number" min="30" value="200" disabled oninput="UpdateView()"/>px</td></tr>
+
+                            <tr><td colspan="3"><h2>Sender style</h2></td></tr>
+                            <tr><td>Show Twitch badges</td><td>(Default: true)</td><td><input id="showbadgesInput" type="checkbox" checked oninput="UpdateView()"/></td></tr>
+                            <tr><td>Space between individual badges</td><td>(Default: 3px)</td><td><input class="number" id="badgespaceInput" type="number" value="3" min="0" oninput="UpdateView()"/>px</td></tr>
+                            <tr><td>Use custom sender style</td><td>(Default: false)</td><td><input id="senderstyle" type="checkbox" oninput="UpdateView()"/></td></tr>
+                            <tr><td>Font</td><td></td><td><select id="senderFontSelector" name="senderFont" disabled onchange="UpdateView()"></select></td></tr>
+                            <tr><td>Font size</td><td></td><td><input class="number" id="sendersizeInput" type="number" disabled value="20" min="5" oninput="UpdateView()"/>px</td></tr>
+                            <tr><td>Text alignment</td><td>(Default: Left)</td><td><select id="senderalign" name="senderalign" onchange="UpdateView()"><option value="left">Left</option><option value="right">Right</option></select></td></tr>
+
+                            <tr><td colspan="3"><h2>Channel style</h2></td></tr>
+                            <tr><td>Show the channel the message was sent to</td><td>(Default: true)</td><td><input id="showrecipientInput" type="checkbox" checked oninput="UpdateView()"/></td></tr>
+                            <tr><td>Show the channel image</td><td>(Default: false)</td><td><input id="showchannelImage" type="checkbox" oninput="UpdateView()"/></td></tr>
+                            <tr><td>Use custom channel style</td><td>(Default: false)</td><td><input id="recipientstyle" type="checkbox" oninput="UpdateView()"/></td></tr>
+                            <tr><td>Font</td><td></td><td><select id="recipientFontSelector" name="receiverFont" disabled onchange="UpdateView()"></select></td></tr>
+                            <tr><td>Font size</td><td></td><td><input class="number" id="recipientsizeInput" disabled type="number" value="20" min="5" oninput="UpdateView()"/>px</td></tr>
+                            <tr><td>Font color</td><td>(Default: #000000)</td><td><input id="recipientcolorInput" type="color" disabled value="#000000" oninput="UpdateView()"/></td></tr>
+                            <tr><td>Text alignment</td><td>(Default: Left)</td><td><select id="channelalign" name="channelalign" onchange="UpdateView()"><option value="left">Left</option><option value="right">Right</option></select></td></tr>
+
+                            <tr><td colspan="3"><h2>Highlighted messages</h2></td></tr>
+                            <tr><td colspan="3"><h3>Channel points</h3></td></tr>
+                            <tr><td>Highlight messages highlighted via channel points</td><td>(Default: false)</td><td><input id="highlight" type="checkbox" oninput="UpdateView()"/></td></tr>
+                            <tr><td>Highlight only messages in channels:</td><td colspan="2"><input style="width:100%" id="highlightOnlyInput" type="text" placeholder="Channel1,Channel2,..." disabled oninput="UpdateView()"/></td></tr>
+                            <tr><td>Font color to use for highlighted messages</td><td>(Default: #FFFFFF)</td><td><input id="highlightfontcolorInput" type="color" disabled value="#FFFFFF" oninput="UpdateView()"/></td></tr>
+                            <tr><td>Background color to use for highlighted messages</td><td>(Default: #755EBC)</td><td><input id="highlightbackgroundcolorInput" type="color" disabled value="#755EBC" oninput="UpdateView()"/></td></tr>
+                            <tr><td>Transparency</td><td></td><td><input class="number" id="highlighttransparencyInput" disabled type="number" value="20" min="0" max="100" oninput="UpdateView()"/>%</td></tr>
+                            <tr><td colspan="3"><h3>Subscriptions</h3></td></tr>
+                            <tr><td colspan="3"><h2>Animation</h2></td></tr>
+                            <tr><td>Fade-in/-out time (0: "do not fade")</td><td>(Default: 0)</td><td><input class="number" id="fadetime" type="number" value="0" min="0" step="0.1" oninput="UpdateView()"/>sec</td></tr>
+                            <tr><td>Show duration (0: "always show after fade-in")</td><td>(Default: 0)</td><td><input class="number" id="showtime" type="number" value="0" min="0" step="0.1" oninput="UpdateView()"/>sec</td></tr>
+                        </table>
+                    </div>
+                    <div class="col content" style="margin-top:15px;margin-bottom:15px">
+                        <div id="preview" class="preview"></div>
+                    </div>
+                    <div class="col footer" style="min-width:15px"></div>
+                </div>
+            </div>
+            <div id="row footer" style="margin:5px;font-size:20px">
+                <b style="margin-right:10px">&copy;2020 <a href="https://stefan.ensmann.de">Stefan Ensmann</a></b>
+                <a href="https://streamlabs.com/zensmann/tip" target="_blank"><img src="../img/donate.png" alt="Avatar" class="image" style="margin-left:5px;height: 25px;vertical-align: middle;"/></a>
+                <a href="https://discord.gg/c2Zejwe" target="_blank"><img src="../img/discord.svg" alt="Avatar" class="image" style="margin-left:5px;height: 25px;vertical-align: middle;"/></a><br />
+                Got a question? Found a bug? Join my Discord server and let me know! Like what you see? Consider donating a small amount to support this page.
+            </div>
+        </div>
+        <script src="parseStyle.js"></script>
+        <script src="configurator.js"></script>
+    </body>
+</html>
