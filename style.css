@@ -1,0 +1,25 @@
+.config-category {
+    padding: 0.5em;
+    border-radius: 1em;
+    border: 1px solid black;
+}
+
+.config-category-header {
+    font-size: 1.5em;
+}
+
+.config-element-header {
+    font-size: 1.2em;
+}
+
+.config-slider {
+
+}
+
+.config-slider-range-input {
+
+}
+
+.config-slider-number-input {
+
+}

@@ -3,23 +3,66 @@
     <head>
         <meta charset="utf-8" />
         <title>Zensmann's Joined Twitch Chats</title>
-        <meta property="og:title" content="Zensmann's Joined Twitch Chats Configurator" />
-        <meta property="og:description" content="Combine multiple chats into a single overlay!" />
-        <meta property="og:site_name" content="Zensmann's Online Tools" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://tools.ensmann.de/joined-chat/" />
-        <meta property="og:image" content="https://tools.ensmann.de/img/joined-chat.png" />
-        <meta property="og:image:type" content="image/png" />
-        <link rel="shortcut icon" type="image/x-icon" href="https://tools.ensmann.de/img/favicon.ico" />
-        <link rel="stylesheet" href="joined-chat.css" />
-
-        <script src="https://tools.ensmann.de/parameters.js"></script>
-        <script src="tmi.min.js"></script>
-        <script src="Queue.js"></script>
+        <link rel="stylesheet" href="style.css" />
+        
+        <script src="https://unpkg.com/vue@next"></script>
+        <script src="configurator.js"></script>
+        <script src="components/category.js"></script>
+        <script src="components/checkbox.js"></script>
+        <script src="components/colorpicker.js"></script>
+        <script src="components/select.js"></script>
+        <script src="components/slider.js"></script>
+        <script src="components/textinput.js"></script>
     </head>
     <body>
-        <div id="content" class="box"></div>
-        <script src="parseStyle.js"></script>
-        <script type="module" src="joined-chat.js"></script>
+        <config-category name="General">
+            <config-text v-model="channelList" name="Channels"></config-text>
+            <config-slider :min=1 :max=50 v-model="maxMessages" :step=1 name="Maximum messages"></config-slider>
+            <config-color v-model="backgroundColor" name="Background color"></config-color>
+            <config-checkbox v-model="useBackground" name="Use background in output"></config-checkbox>
+        </config-category>
+        <config-category name="Hidden">
+            <config-text v-model="hiddenChannels" name="Hide messages from"></config-text>
+            <config-checkbox v-model="hideCommands" name="Hide commands starting with '!'"></config-checkbox>
+            <config-checkbox v-model="hideURLs" name="Hide URLs"></config-checkbox>
+        </config-category>
+        <config-category name="Message style">
+            <config-select v-model="font" name="Font style">
+                <option>Montserrat</option>
+                <option>Montserrat Alternates</option>
+                <option>Montserrat Subrayada</option>
+            </config-select>
+            <config-slider :min=1 :max=50 v-model="fontSize" :step=1 name="Font size"></config-slider>
+            <config-color v-model="fontColor" name="Font color"></config-color>
+            <config-select v-model="textAlignment" name="Alignment">
+                <option>Left</option>
+                <option>Right</option>
+                <option>Justify</option>
+            </config-select>
+            <config-select v-model="actionDisplay" name="Display styles for actions (/me)">
+                <option>None</option>
+                <option>Color</option>
+                <option>Italic</option>
+            </config-select>
+            <config-slider :min=0.1 :max=4 v-model="emoteScaleFactor" :step=0.1 name="Emote scale"></config-slider>
+            <config-slider :min=0 :max=20 v-model="spaceBetweenMessages" :step=1 name="Space between messages"></config-slider>
+            <config-slider :min=0 :max=20 v-model="spaceAroundMessages" :step=1 name="Sender around messages"></config-slider>
+            <config-checkbox v-model="wrapAroundName" name="Wrap around name"></config-checkbox>
+            <config-slider :min=0 :max=20 v-model="senderSpaceRight" :step=1 name="Sender space (right)"></config-slider>
+            <config-slider :min=0 :max=20 v-model="senderSpaceBottom" :step=1 name="Sender space (bottom)"></config-slider>
+            <config-slider :min=50 :max=600 v-model="senderReservedSpace" :step=1 name="Sender space (right)"></config-slider>
+        </config-category>
+        <config-category name="Sender style">
+
+        </config-category>
+        <config-category name="Channel style">
+
+        </config-category>
+        <config-category name="Highlighted messages">
+
+        </config-category>
+        <config-category name="Animation">
+
+        </config-category>
     </body>
 </html>
