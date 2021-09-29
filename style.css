@@ -1,25 +1,131 @@
-.config-category {
-    padding: 0.5em;
-    border-radius: 1em;
-    border: 1px solid black;
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&family=Lato&display=swap');
+
+html, body {
+    background-color: #1D3554;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-family: 'Lato', sans-serif;
+    box-sizing: border-box;
 }
 
-.config-category-header {
-    font-size: 1.5em;
+#content {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+#config-area {
+    flex: 0 0 25em;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#preview-area {
+    flex: 1 0 10px;
+    width: 100%;
+    height: 100%;
+}
+
+.config-element {
+    margin-top: 0.7em;
 }
 
 .config-element-header {
     font-size: 1.2em;
+    margin-bottom: 0.1em;
 }
 
-.config-slider {
-
+.config-editable-input {
+    font-family: 'Lato', sans-serif;
+    color: white;
+    border-radius: 0.5em;
+    border: 0.15em solid #ABC2E0;
+    background-color: #0E2645;
+    padding: 0.2em 0.4em 0.2em 0.4em;
 }
 
-.config-slider-range-input {
-
+.config-category {
+    margin: 1em 1em 0.5em 0.3em;
+    padding: 0.5em;
+    border-radius: 1em;
+    border: 0.1em solid #1B79F5;
+    filter: drop-shadow(0.3em 0.3em 0.3em #3E6CA8);
+    background-color: #032757;
 }
 
-.config-slider-number-input {
+.config-category-header {
+    font-size: 1.5em;
+    font-family: 'Comfortaa', cursive;
+}
 
+.config-category-content {
+    max-height: none;
+    overflow: hidden;
+}
+
+.config-checkbox-input {
+    margin-left: 0.5em;
+}
+
+.config-color-input {
+    width: 2em;
+    height: 2em;
+    background-color: #1D3554;
+}
+
+.config-color-span {
+    margin-left: 0.5em;
+}
+
+.config-slider-flexbox {
+    display: flex;
+    align-items: center;
+}
+
+.config-slider-rangeinput {
+    flex: 1 0 auto;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #1D3554;
+    opacity: 0.7;
+    height: 0.5em;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
+    border-radius: 0.25em;
+}
+
+.config-slider-rangeinput:hover {
+    opacity: 1;
+}
+
+.config-slider-rangeinput::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1em;
+    height: 1em;
+    background: #1B79F5;
+    cursor: pointer;
+    border-radius: 0.3em;
+}
+
+.config-slider-rangeinput::-moz-range-thumb {
+    width: 1em;
+    height: 1em;
+    background: #1B79F5;
+    cursor: pointer;
+    border-radius: 0.3em;
+}
+
+.config-slider-numberinput {
+    margin-left: 0.5em;
+    flex: 0 0 3.5em;
+}
+
+.config-text-input {
+    width: 100%;
+    box-sizing: border-box;
 }

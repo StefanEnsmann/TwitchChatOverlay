@@ -16,9 +16,9 @@ app.component("config-text", {
     },
     /*html*/
     template: `
-    <div class="config-text">
+    <div class="config-element config-text">
         <div class="config-element-header">{{ name }}</div>
-        <input class="config-text-input" v-model="value" type="text" />
+        <input class="config-text-input config-editable-input" v-model="value" type="text" />
     </div>
     `
 });

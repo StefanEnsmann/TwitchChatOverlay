@@ -16,9 +16,9 @@ app.component("config-select", {
     },
     /*html*/
     template: `
-    <div class="config-select">
+    <div class="config-element config-select">
         <div class="config-element-header">{{ name }}</div>
-        <select class="config-select" v-model="value">
+        <select class="config-select-input config-editable-input" v-model="value">
             <slot></slot>
         </select>
     </div>

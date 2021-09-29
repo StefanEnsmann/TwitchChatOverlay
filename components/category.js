@@ -6,7 +6,9 @@ app.component("config-category", {
     template: `
     <div class="config-category">
         <div class="config-category-header">{{ name }}</div>
-        <slot></slot>
+        <div class="config-category-content">
+            <slot></slot>
+        </div>
     </div>
     `
 });

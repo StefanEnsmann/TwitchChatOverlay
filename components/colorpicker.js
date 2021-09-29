@@ -16,9 +16,9 @@ app.component("config-color", {
     },
     /*html*/
     template: `
-    <div class="config-color">
+    <div class="config-element config-color">
         <div class="config-element-header">{{ name }}</div>
-        <input class="config-color-input" v-model="value" type="color" /><span>({{ value }})</span>
+        <input class="config-color-input" v-model="value" type="color" /><span class="config-color-span">({{ value }})</span>
     </div>
     `
 });

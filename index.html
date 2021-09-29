@@ -15,54 +15,98 @@
         <script src="components/textinput.js"></script>
     </head>
     <body>
-        <config-category name="General">
-            <config-text v-model="channelList" name="Channels"></config-text>
-            <config-slider :min=1 :max=50 v-model="maxMessages" :step=1 name="Maximum messages"></config-slider>
-            <config-color v-model="backgroundColor" name="Background color"></config-color>
-            <config-checkbox v-model="useBackground" name="Use background in output"></config-checkbox>
-        </config-category>
-        <config-category name="Hidden">
-            <config-text v-model="hiddenChannels" name="Hide messages from"></config-text>
-            <config-checkbox v-model="hideCommands" name="Hide commands starting with '!'"></config-checkbox>
-            <config-checkbox v-model="hideURLs" name="Hide URLs"></config-checkbox>
-        </config-category>
-        <config-category name="Message style">
-            <config-select v-model="font" name="Font style">
-                <option>Montserrat</option>
-                <option>Montserrat Alternates</option>
-                <option>Montserrat Subrayada</option>
-            </config-select>
-            <config-slider :min=1 :max=50 v-model="fontSize" :step=1 name="Font size"></config-slider>
-            <config-color v-model="fontColor" name="Font color"></config-color>
-            <config-select v-model="textAlignment" name="Alignment">
-                <option>Left</option>
-                <option>Right</option>
-                <option>Justify</option>
-            </config-select>
-            <config-select v-model="actionDisplay" name="Display styles for actions (/me)">
-                <option>None</option>
-                <option>Color</option>
-                <option>Italic</option>
-            </config-select>
-            <config-slider :min=0.1 :max=4 v-model="emoteScaleFactor" :step=0.1 name="Emote scale"></config-slider>
-            <config-slider :min=0 :max=20 v-model="spaceBetweenMessages" :step=1 name="Space between messages"></config-slider>
-            <config-slider :min=0 :max=20 v-model="spaceAroundMessages" :step=1 name="Sender around messages"></config-slider>
-            <config-checkbox v-model="wrapAroundName" name="Wrap around name"></config-checkbox>
-            <config-slider :min=0 :max=20 v-model="senderSpaceRight" :step=1 name="Sender space (right)"></config-slider>
-            <config-slider :min=0 :max=20 v-model="senderSpaceBottom" :step=1 name="Sender space (bottom)"></config-slider>
-            <config-slider :min=50 :max=600 v-model="senderReservedSpace" :step=1 name="Sender space (right)"></config-slider>
-        </config-category>
-        <config-category name="Sender style">
+        <div id="content">
+            <div id="config-area">
+                <config-category name="General">
+                    <config-text v-model="general.channels" name="Channels"></config-text>
+                    <config-slider :min=1 :max=50 v-model="general.maxMessages" :step=1 name="Maximum messages"></config-slider>
+                    <config-color v-model="general.backgroundColor" name="Background color"></config-color>
+                    <config-checkbox v-model="general.useBackground" name="Use background in output"></config-checkbox>
+                </config-category>
+                <config-category name="Hidden">
+                    <config-text v-model="hidden.channels" name="Hide messages from"></config-text>
+                    <config-checkbox v-model="hidden.commands" name="Hide commands starting with '!'"></config-checkbox>
+                    <config-checkbox v-model="hidden.URLs" name="Hide URLs"></config-checkbox>
+                </config-category>
+                <config-category name="Font">
+                    <config-select v-model="font.style" name="Font style">
+                        <option>Montserrat</option>
+                        <option>Montserrat Alternates</option>
+                        <option>Montserrat Subrayada</option>
+                    </config-select>
+                    <config-slider :min=6 :max=50 v-model="font.size" :step=1 name="Font size"></config-slider>
+                    <config-color v-model="font.color" name="Font color"></config-color>
+                    <config-select v-model="font.action" name="Display styles for actions (/me)">
+                        <option>None</option>
+                        <option>Color</option>
+                        <option>Italic</option>
+                    </config-select>
+                    <config-slider :min=0.1 :max=4 v-model="font.emoteFactor" :step=0.1 name="Emote scale"></config-slider>
+                </config-category>
+                <config-category name="Spacing">
+                    <config-select v-model="spacing.alignment" name="Alignment">
+                        <option>Left</option>
+                        <option>Right</option>
+                        <option>Justify</option>
+                    </config-select>
+                    <config-slider :min=0 :max=20 v-model="spacing.between" :step=1 name="Space between messages"></config-slider>
+                    <config-slider :min=0 :max=20 v-model="spacing.around" :step=1 name="Sender around messages"></config-slider>
+                    <config-checkbox v-model="spacing.wrap" name="Wrap around name"></config-checkbox>
+                    <config-slider :min=0 :max=20 v-model="spacing.senderRight" :step=1 name="Sender space (right)"></config-slider>
+                    <config-slider v-if="spacing.wrap" :min=0 :max=20 v-model="spacing.senderBottom" :step=1 name="Sender space (bottom)"></config-slider>
+                    <config-slider v-if="!spacing.wrap" :min=50 :max=600 v-model="spacing.senderReserved" :step=1 name="Reserved space for sender"></config-slider>
+                </config-category>
+                <config-category name="Sender style">
+                    <config-checkbox v-model="sender.badges" name="Show Twitch badges"></config-checkbox>
+                    <config-slider v-if="sender.badges" :min=0 :max=10 v-model="sender.badgeSpace" :step=1 name="Space between badges"></config-slider>
+                    <config-checkbox v-model="sender.customStyle" name="Use custom style"></config-checkbox>
+                    <config-select v-if="sender.customStyle" v-model="sender.font" name="Font style">
+                        <option>Montserrat</option>
+                        <option>Montserrat Alternates</option>
+                        <option>Montserrat Subrayada</option>
+                    </config-select>
+                    <config-slider v-if="sender.customStyle" :min=6 :max=50 v-model="sender.size" :step=1 name="Font size"></config-slider>
+                    <config-select v-if="sender.customStyle" v-model="sender.alignment" name="Alignment">
+                        <option>Left</option>
+                        <option>Right</option>
+                    </config-select>
+                </config-category>
+                <config-category name="Target style">
+                    <config-checkbox v-model="target.showTarget" name="Show target channel"></config-checkbox>
+                    <config-checkbox v-if="target.showTarget" v-model="target.useImage" name="Show channel image"></config-checkbox>
+                    <config-checkbox v-if="target.showTarget" v-model="target.customStyle" name="Use custom style"></config-checkbox>
+                    <config-select v-if="target.showTarget && target.customStyle" v-model="target.font" name="Font style">
+                        <option>Montserrat</option>
+                        <option>Montserrat Alternates</option>
+                        <option>Montserrat Subrayada</option>
+                    </config-select>
+                    <config-slider v-if="target.showTarget && target.customStyle" :min=6 :max=50 v-model="target.size" :step=1 name="Font size"></config-slider>
+                    <config-color v-if="target.showTarget && target.customStyle" v-model="target.color" name="Color"></config-color>
+                    <config-select v-if="target.showTarget && target.customStyle" v-model="target.alignment" name="Alignment">
+                        <option>Left</option>
+                        <option>Right</option>
+                    </config-select>
+                </config-category>
+                <config-category name="Special messages">
+                    <config-category name="Highlighted messages">
+                        <config-checkbox v-model="special.highlighted.highlightMessages" name="Highlight channel point messages"></config-checkbox>
+                        <config-text v-if="special.highlighted.highlightMessages" v-model="special.highlighted.channels" name="In those channels"></config-text>
+                        <config-color v-if="special.highlighted.highlightMessages" v-model="special.highlighted.fontColor" name="Font color"></config-color>
+                        <config-color v-if="special.highlighted.highlightMessages" v-model="special.highlighted.backgroundColor" name="Background color"></config-color>
+                        <config-slider v-if="special.highlighted.highlightMessages" :min=0 :max=100 v-model="special.highlighted.alpha" :step=1 name="Transparency"></config-slider>
+                    </config-category>
+                    <config-category name="Subscriptions">
+        
+                    </config-category>
+                </config-category>
+                <config-category name="Animation">
+                    <config-slider :min=0 :max=2 v-model="animation.fadetime" :step=0.1 name="Fade time"></config-slider>
+                    <config-slider :min=0 :max=20 v-model="animation.showtime" :step=0.1 name="Show time"></config-slider>
+                </config-category>
+            </div>
+            <div id="preview-area" :style="{ backgroundColor: general.backgroundColor}">
 
-        </config-category>
-        <config-category name="Channel style">
-
-        </config-category>
-        <config-category name="Highlighted messages">
-
-        </config-category>
-        <config-category name="Animation">
-
-        </config-category>
+            </div>
+        </div>
     </body>
 </html>
