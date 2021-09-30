@@ -5,7 +5,7 @@ const app = Vue.createApp({
             general: {
                 channels: "",
                 maxMessages: 20, //[1;50]
-                backgroundColor: "#008000",
+                backgroundColor: "#1D3554",
                 useBackground: false
             },
             hidden: {
@@ -61,7 +61,8 @@ const app = Vue.createApp({
             animation: {
                 fadetime: 0.3, //[0.0;2.0]
                 showtime: 4 // [0.0;20.0]
-            }
+            },
+            _messages: dummyData()
         };
     }
 });
@@ -71,3 +72,17 @@ function mountApp() {
 }
 
 window.onload = mountApp;
+
+function dummyData() {
+    return [
+        {
+            msg: "This is a test message by myself in my own chat",
+            sender: "Zensmann",
+            target: "zensmann",
+            emotes: {},
+            color: "#DAA520",
+            type: "chat",
+            badges: {"broadcaster": "1"}
+        }
+    ];
+}
