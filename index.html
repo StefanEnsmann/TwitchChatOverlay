@@ -3,11 +3,24 @@
     <head>
         <meta charset="utf-8" />
         <title>Zensmann's Joined Twitch Chats</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="chat.css" />
         
+        <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+        <script src="fonts.js"></script>
+        <script>
+            const replFonts = fonts.map((v) => v.replace(/ /g, '+'));
+            let stylesheet = $("<link>", {
+                rel: "stylesheet",
+                href: "https://fonts.googleapis.com/css2?" + replFonts.map((v) => "family=" + v + ":ital@0;1").join("&") + "&display=swap"
+            }).appendTo("head");
+        </script>
         <script src="https://unpkg.com/vue@next"></script>
         <script src="configurator.js"></script>
         <script src="components/category.js"></script>
+        <script src="components/chatmessage.js"></script>
         <script src="components/checkbox.js"></script>
         <script src="components/colorpicker.js"></script>
         <script src="components/select.js"></script>
@@ -30,9 +43,7 @@
                 </config-category>
                 <config-category name="Font">
                     <config-select v-model="font.style" name="Font style">
-                        <option>Montserrat</option>
-                        <option>Montserrat Alternates</option>
-                        <option>Montserrat Subrayada</option>
+                        <option v-for="font in fonts">{{ font }}</option>
                     </config-select>
                     <config-slider :min=6 :max=50 v-model="font.size" :step=1 name="Font size"></config-slider>
                     <config-color v-model="font.color" name="Font color"></config-color>
@@ -50,7 +61,7 @@
                         <option>Justify</option>
                     </config-select>
                     <config-slider :min=0 :max=20 v-model="spacing.between" :step=1 name="Space between messages"></config-slider>
-                    <config-slider :min=0 :max=20 v-model="spacing.around" :step=1 name="Sender around messages"></config-slider>
+                    <config-slider :min=0 :max=20 v-model="spacing.around" :step=1 name="Space around messages"></config-slider>
                     <config-checkbox v-model="spacing.wrap" name="Wrap around name"></config-checkbox>
                     <config-slider :min=0 :max=20 v-model="spacing.senderRight" :step=1 name="Sender space (right)"></config-slider>
                     <config-slider v-if="spacing.wrap" :min=0 :max=20 v-model="spacing.senderBottom" :step=1 name="Sender space (bottom)"></config-slider>
@@ -61,9 +72,7 @@
                     <config-slider v-if="sender.badges" :min=0 :max=10 v-model="sender.badgeSpace" :step=1 name="Space between badges"></config-slider>
                     <config-checkbox v-model="sender.customStyle" name="Use custom style"></config-checkbox>
                     <config-select v-if="sender.customStyle" v-model="sender.font" name="Font style">
-                        <option>Montserrat</option>
-                        <option>Montserrat Alternates</option>
-                        <option>Montserrat Subrayada</option>
+                        <option v-for="font in fonts">{{ font }}</option>
                     </config-select>
                     <config-slider v-if="sender.customStyle" :min=6 :max=50 v-model="sender.size" :step=1 name="Font size"></config-slider>
                     <config-select v-if="sender.customStyle" v-model="sender.alignment" name="Alignment">
@@ -76,9 +85,7 @@
                     <config-checkbox v-if="target.showTarget" v-model="target.useImage" name="Show channel image"></config-checkbox>
                     <config-checkbox v-if="target.showTarget" v-model="target.customStyle" name="Use custom style"></config-checkbox>
                     <config-select v-if="target.showTarget && target.customStyle" v-model="target.font" name="Font style">
-                        <option>Montserrat</option>
-                        <option>Montserrat Alternates</option>
-                        <option>Montserrat Subrayada</option>
+                        <option v-for="font in fonts">{{ font }}</option>
                     </config-select>
                     <config-slider v-if="target.showTarget && target.customStyle" :min=6 :max=50 v-model="target.size" :step=1 name="Font size"></config-slider>
                     <config-color v-if="target.showTarget && target.customStyle" v-model="target.color" name="Color"></config-color>
@@ -87,25 +94,22 @@
                         <option>Right</option>
                     </config-select>
                 </config-category>
-                <config-category name="Special messages">
-                    <config-category name="Highlighted messages">
-                        <config-checkbox v-model="special.highlighted.highlightMessages" name="Highlight channel point messages"></config-checkbox>
-                        <config-text v-if="special.highlighted.highlightMessages" v-model="special.highlighted.channels" name="In those channels"></config-text>
-                        <config-color v-if="special.highlighted.highlightMessages" v-model="special.highlighted.fontColor" name="Font color"></config-color>
-                        <config-color v-if="special.highlighted.highlightMessages" v-model="special.highlighted.backgroundColor" name="Background color"></config-color>
-                        <config-slider v-if="special.highlighted.highlightMessages" :min=0 :max=100 v-model="special.highlighted.alpha" :step=1 name="Transparency"></config-slider>
-                    </config-category>
-                    <config-category name="Subscriptions">
-        
-                    </config-category>
+                <config-category name="Highlighted messages">
+                    <config-checkbox v-model="special.highlighted.highlightMessages" name="Highlight channel point messages"></config-checkbox>
+                    <config-text v-if="special.highlighted.highlightMessages" v-model="special.highlighted.channels" name="In those channels"></config-text>
+                    <config-color v-if="special.highlighted.highlightMessages" v-model="special.highlighted.fontColor" name="Font color"></config-color>
+                    <config-color v-if="special.highlighted.highlightMessages" v-model="special.highlighted.backgroundColor" name="Background color"></config-color>
+                    <config-slider v-if="special.highlighted.highlightMessages" :min=0 :max=100 v-model="special.highlighted.alpha" :step=1 name="Transparency"></config-slider>
                 </config-category>
                 <config-category name="Animation">
                     <config-slider :min=0 :max=2 v-model="animation.fadetime" :step=0.1 name="Fade time"></config-slider>
                     <config-slider :min=0 :max=20 v-model="animation.showtime" :step=0.1 name="Show time"></config-slider>
                 </config-category>
             </div>
-            <div id="preview-area" :style="{ backgroundColor: general.backgroundColor}">
-
+            <div id="preview-area">
+                <div id="chat-area" :style="{ backgroundColor: general.backgroundColor, rowGap: spacing.between + 'px'}">
+                    <chatmessage v-for="m in messages" :message="m" :styleconfig="getStyle"></chatmessage>
+                </div>
             </div>
         </div>
     </body>

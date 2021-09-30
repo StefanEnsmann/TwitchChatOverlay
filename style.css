@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa&family=Lato&display=swap');
-
 html, body {
     background-color: #1D3554;
     width: 100%;
@@ -28,6 +26,9 @@ html, body {
     flex: 1 0 10px;
     width: 100%;
     height: 100%;
+    padding: 1em;
+    background-color: black;
+    box-sizing: border-box;
 }
 
 .config-element {

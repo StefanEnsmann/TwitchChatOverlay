@@ -1,0 +1,18 @@
+html, body {
+    margin: 0;
+}
+
+#chat-area {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    vertical-align: bottom;
+    justify-content: flex-start;
+    overflow-y: hidden;
+}
+
+.chat-message {
+    flex: 0 0 10px;
+    overflow-wrap: break-word;
+}

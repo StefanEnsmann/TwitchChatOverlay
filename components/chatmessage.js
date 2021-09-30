@@ -1,12 +1,16 @@
 app.component("chatmessage", {
     props: {
-        "message": Object
+        message: Object,
+        styleconfig: Object
     },
     /*html*/
     template: `
-    <div class="config-element config-checkbox">
-        <span class="config-element-header">{{ name }}</span>
-        <input class="config-checkbox-input" v-model="value" type="checkbox" />
+    <div class="chat-message" :style="styleconfig.box">
+        <div class="chat-message-sndr-box" :style="styleconfig.sndrbox">
+            <div class="chat-message-sndr" :style="styleconfig.sndr">{{ message.sender }}</div>
+            <div class="chat-message-trgt" :style="styleconfig.trgt">{{ message.target }}</div>
+        </div>
+        <div class="chat-message-msg" :style="styleconfig.msg">{{ message.msg }}</div>
     </div>
     `
 });
