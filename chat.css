@@ -10,9 +10,17 @@ html, body {
     vertical-align: bottom;
     justify-content: flex-start;
     overflow-y: hidden;
+    box-sizing: border-box;
 }
 
 .chat-message {
     flex: 0 0 10px;
     overflow-wrap: break-word;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.chat-message-image {
+    vertical-align: text-bottom;
+    height: 1em;
 }

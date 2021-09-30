@@ -81,15 +81,15 @@
                     </config-select>
                 </config-category>
                 <config-category name="Target style">
-                    <config-checkbox v-model="target.showTarget" name="Show target channel"></config-checkbox>
-                    <config-checkbox v-if="target.showTarget" v-model="target.useImage" name="Show channel image"></config-checkbox>
-                    <config-checkbox v-if="target.showTarget" v-model="target.customStyle" name="Use custom style"></config-checkbox>
-                    <config-select v-if="target.showTarget && target.customStyle" v-model="target.font" name="Font style">
+                    <config-checkbox v-model="target.useImage" name="Show channel image"></config-checkbox>
+                    <config-checkbox v-model="target.useName" name="Show channel name"></config-checkbox>
+                    <config-checkbox v-if="target.useName" v-model="target.customStyle" name="Use custom style"></config-checkbox>
+                    <config-select v-if="target.customStyle && target.useName" v-model="target.font" name="Font style">
                         <option v-for="font in fonts">{{ font }}</option>
                     </config-select>
-                    <config-slider v-if="target.showTarget && target.customStyle" :min=6 :max=50 v-model="target.size" :step=1 name="Font size"></config-slider>
-                    <config-color v-if="target.showTarget && target.customStyle" v-model="target.color" name="Color"></config-color>
-                    <config-select v-if="target.showTarget && target.customStyle" v-model="target.alignment" name="Alignment">
+                    <config-slider v-if="target.customStyle && target.useName" :min=6 :max=50 v-model="target.size" :step=1 name="Font size"></config-slider>
+                    <config-color v-if="target.customStyle && target.useName" v-model="target.color" name="Color"></config-color>
+                    <config-select v-if="target.customStyle && target.useName" v-model="target.alignment" name="Alignment">
                         <option>Left</option>
                         <option>Right</option>
                     </config-select>

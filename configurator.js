@@ -16,13 +16,13 @@ const app = Vue.createApp({
             font: {
                 style: "Montserrat",
                 size: 20, // [6;50]
-                color: "#000000",
+                color: "#CCCCCC",
                 action: "Color", // None, Color, Italic
                 emoteFactor: 1.0, // [0.1;4.0]
             },
             spacing: {
                 alignment: "Left", // Left, Right, Justify
-                between: 0, // [0;20]
+                between: 4, // [0;20]
                 around: 4, // [0;20]
                 wrap: true,
                 senderRight: 4, // [0;20]
@@ -38,12 +38,12 @@ const app = Vue.createApp({
                 alignment: "Left" // Left, Right
             },
             target: {
-                showTarget: true,
                 useImage: false,
-                customStyle: false,
+                useName: true,
+                customStyle: true,
                 font: "Montserrat",
                 size: 20, //[6;50]
-                color: "#000000",
+                color: "#777777",
                 alignment: "Left" // Left, Right
             },
             special: {
@@ -68,16 +68,47 @@ const app = Vue.createApp({
     computed: {
         getStyle() {
             s = { box: {}, sndrbox: {}, sndr: {}, trgt: {}, msg: {}, misc: {}};
-            s.box["marginLeft"] = s.box["marginRight"] = this.spacing.around + "px";
+            s.box["padding"] = this.spacing.around + "px";
+            s.box["color"] = this.font.color;
+            s.box["fontSize"] = this.font.size + "px";
+            s.box["fontFamily"] = this.font.style;
+            s.msg["textAlign"] = this.spacing.alignment.toLowerCase();
             
-            s.sndr["fontSize"] = (this.sender.customStyle ? this.sender.size : this.font.size) + "px";
+            if (this.sender.customStyle) {
+                s.sndr["fontFamily"] = this.sender.font;
+                s.sndr["fontSize"] = this.sender.size + "px";
+                s.sndr["textAlign"] = this.sender.alignment.toLowerCase();
+            }
             
-            s.trgt["fontSize"] = (this.target.customStyle ? this.target.size : this.font.size) + "px";
 
-            s.msg["fontSize"] = this.font.size + "px";
+            if (this.target.customStyle && this.target.useName) {
+                s.trgt["fontFamily"] = this.target.font;
+                s.trgt["fontSize"] = this.target.size + "px";
+                s.trgt["color"] = this.target.color;
+                s.trgt["textAlign"] = this.target.alignment.toLowerCase();
+            }
 
-            s.sndrbox["marginBottom"] = this.spacing.senderBottom + "px";
+            s.sndrbox["marginRight"] = this.spacing.senderRight + "px";
+            if (this.spacing.wrap) {
+                s.sndrbox["float"] = "left";
+                s.sndrbox["marginBottom"] = this.spacing.senderBottom + "px";
+            }
+            else {
+                s.box["display"] = "flex";
+                s.sndrbox["flex"] = "0 0 " + this.spacing.senderReserved + "px";
+                s.sndrbox["overflowX"] = "hidden";
+                s.sndrbox["whiteSpace"] = "nowrap";
 
+                s.msg["flex"] = "1 0 10px";
+                s.msg["overflowWrap"] = "break-word";
+            }
+
+
+            s.misc["targetImage"] = this.target.useImage;
+            s.misc["targetName"] = this.target.useName;
+            s.misc["hideURL"] = this.hidden.URLs;
+            s.misc["emoteFactor"] = this.font.emoteFactor;
+            s.misc["action"] = this.font.action;
             return s;
         }
     }
